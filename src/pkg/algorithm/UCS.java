@@ -13,7 +13,8 @@ import pkg.util.Util;
 public class UCS {
     public static Result search(final String startWord, final String endWord){
 
-        System.out.println("\nMencari path menggunakan Uniform Cost Search...\n");
+        System.out.print("\nMencari path menggunakan ");
+        Util.printlnColor(Util.GREEN, "Uniform Cost Search\n");
 
         // Bersihkan memory
         System.gc();

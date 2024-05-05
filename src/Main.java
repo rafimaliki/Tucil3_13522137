@@ -5,7 +5,7 @@ import pkg.result.Result;
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("\033[2J\033[1;1H\nSelamat datang di Word Ladder Solver!");
+        Util.printlnColor(Util.GREEN, "\033[2J\033[1;1H\nSelamat datang di Word Ladder Solver!");
 
         boolean loop = true;
     

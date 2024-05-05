@@ -12,7 +12,7 @@ public class Result {
     private int errorCode;
 
     /*
-     * Error codes:
+     * Error code:
      * 0: No error
      * 1: No path found
      * 2: Invalid start word
@@ -48,7 +48,7 @@ public class Result {
     public void print() {
         switch (this.errorCode) {
             case 0:
-                System.out.println("Path ditemukan!\n");
+                Util.printlnColor(Util.GREEN,"Path ditemukan!\n");
                 printPath();
                 System.out.println("Jumlah langkah  : " + (path.size() - 1));
                 System.out.println("Node dikunjungi : " + nodesVisited);
@@ -56,25 +56,24 @@ public class Result {
                 System.out.println("Memori          : " + memoryUsed + " bytes");
                 break;
             case 1:
-                System.out.println("Path tidak ditemukan!\n");
+                Util.printlnColor(Util.RED,"Path tidak ditemukan!\n");
                 System.out.println("Node dikunjungi : " + nodesVisited);
                 System.out.println("Waktu eksekusi  : " + timeElapsed + " ms");
                 System.out.println("Memori          : " + memoryUsed + " bytes");
                 break;
             case 2:
-                System.out.println("Kata awal tidak valid");
+                Util.printlnColor(Util.RED, "Kata awal tidak valid");
                 break;
             case 3:
-                System.out.println("Kata akhir tidak valid");
+                Util.printlnColor(Util.RED, "Kata akhir tidak valid");
                 break;
             case 4:
-                System.out.println("Kata awal dan akhir sama");
+                Util.printlnColor(Util.RED, "Kata awal dan akhir sama");
                 break;
             case 5:
-                System.out.println("Kata awal dan akhir tidak sama panjang");
+                Util.printlnColor(Util.RED, "Kata awal dan akhir tidak sama panjang");
                 break;
             default:
-                System.out.println("Error code: " + errorCode);
                 break;
         }
     }

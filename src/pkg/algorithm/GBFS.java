@@ -13,7 +13,8 @@ import pkg.util.Util;
 public class GBFS {
     public static Result search(final String startWord, final String endWord){
 
-        System.out.println("\nMencari path menggunakan Greedy Best First Search...\n");
+        System.out.print("\nMencari path menggunakan ");
+        Util.printlnColor(Util.GREEN, "Greedy Best First Search\n");
 
         // Bersihkan memory
         System.gc();

@@ -13,7 +13,8 @@ import pkg.util.Util;
 public class AStar {
     public static Result search(final String startWord, final String endWord){
 
-        System.out.println("\nMencari path menggunakan A* Search...\n");
+        System.out.print("\nMencari path menggunakan ");
+        Util.printlnColor(Util.GREEN, "A* Search\n");
 
         // Bersihkan memory
         System.gc();
