@@ -5,8 +5,6 @@ import pkg.result.Result;
 public class Main {
     public static void main(String[] args) {
 
-        // TO DO: tambahin checker apakah file dictionary lengkap, kalau belum ada init dlu
-
         System.out.println("\033[2J\033[1;1H\nSelamat datang di Word Ladder Solver!");
 
         boolean loop = true;
@@ -15,46 +13,40 @@ public class Main {
 
             String[] words = Util.inputWords(); 
             String startWord = words[0], endWord = words[1];
-    
             String method = Util.inputMethod();
+            Result result;
     
             switch (method) {
                 case "1":
                     // Uniform Cost Search
-                    System.out.println("\nMencari path menggunakan Uniform Cost Search...\n");
-                    Result result1 = UCS.search(startWord, endWord);
-                    result1.print();
+                    result = UCS.search(startWord, endWord);
+                    result.print();
                     break;
-                    
+
                 case "2":
                     // Greedy Best First Search
-                    System.out.println("\nMencari path menggunakan Greedy Best First Search...\n");
-                    Result result2 = GBFS.search(startWord, endWord);
-                    result2.print();
+                    result = GBFS.search(startWord, endWord);
+                    result.print();
                     break;
 
                 case "3":
                     // A* Search
-                    System.out.println("\nMencari path menggunakan A* Search...\n");
-                    Result result3 = AStar.search(startWord, endWord);
-                    result3.print();
+                    result = AStar.search(startWord, endWord);
+                    result.print();
                     break;
 
                 case "4":
                     // Uniform Cost Search
-                    System.out.println("\nMencari path menggunakan Uniform Cost Search...\n");
-                    Result resultUCS = UCS.search(startWord, endWord);
-                    resultUCS.print();
+                    result = UCS.search(startWord, endWord);
+                    result.print();
                     
                     // Greedy Best First Search
-                    System.out.println("\nMencari path menggunakan Greedy Best First Search...\n");
-                    Result resultGBFS = GBFS.search(startWord, endWord);
-                    resultGBFS.print();
+                    result = GBFS.search(startWord, endWord);
+                    result.print();
                     
                     // A* Search
-                    System.out.println("\nMencari path menggunakan A* Search...\n");
-                    Result resultAStar = AStar.search(startWord, endWord);
-                    resultAStar.print();
+                    result = AStar.search(startWord, endWord);
+                    result.print();
                     break;
 
                 case "-1":
@@ -62,6 +54,7 @@ public class Main {
                     System.out.println("\nTerima kasih telah menggunakan Word Ladder Solver!");
                     loop = false;
                     break;
+                    
                 default:
                     System.out.println("\nMetode pencarian tidak valid");
                     break;
