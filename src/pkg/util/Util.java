@@ -2,6 +2,7 @@ package pkg.util;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
+import java.util.Scanner;
 
 public class Util {
 
@@ -12,19 +13,31 @@ public class Util {
     public static String[] inputWords() {
 
         String startWord, endWord = "";
+        
+        @SuppressWarnings("resource")
+        Scanner scanner = new Scanner(System.in);
 
         System.out.print("\nStart word : ");
-        startWord = System.console().readLine();
+        startWord = scanner.nextLine().trim().toLowerCase();;
 
         System.out.print("End word   : ");
-        endWord = System.console().readLine();
+        endWord = scanner.nextLine().trim().toLowerCase();;
 
         return new String[] { startWord, endWord };
     }
 
     public static String inputMethod() {
+
+        String method;
+
+        @SuppressWarnings("resource")
+        Scanner scanner = new Scanner(System.in);
+        
         System.out.print("\nMetode Pencarian:\n1. Uniform Cost Search\n2. Greedy Best First Search\n3. A* Search\n4. Semua\n\nPilih metode pencarian (1-4): ");
-        return System.console().readLine();
+        
+        method = scanner.nextLine().trim();
+
+        return method;
     }
 
     public static long getMemoryUsage() {

@@ -1,10 +1,8 @@
 package pkg.result;
 
 import java.util.List;
-
-import pkg.util.Util;
-
 import java.util.ArrayList;
+import pkg.util.Util;
 
 public class Result {
     private List<String> path;

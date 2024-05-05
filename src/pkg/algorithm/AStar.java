@@ -11,13 +11,14 @@ import pkg.result.Result;
 import pkg.util.Util;
 
 public class AStar {
-    public static Result search(String startWord, String endWord){
+    public static Result search(final String startWord, final String endWord){
 
+        System.out.println("\nMencari path menggunakan A* Search...\n");
+
+        // Bersihkan memory
         System.gc();
-        
-        startWord = startWord.trim().toLowerCase();
-        endWord = endWord.trim().toLowerCase();
 
+        // Validasi kata
         if (!Dictionary.isValidWord(startWord)){
             return new Result(2);
         } else if (!Dictionary.isValidWord(endWord)){
@@ -28,69 +29,86 @@ public class AStar {
             return new Result(5);
         }
 
+        // Load dictionary
         Map<String, List<String>> wordMap = Dictionary.loadMappedDictonary(startWord.length());
-
+        
+        // Inisialisasi waktu mulai dan memory mula-mula
         long startTime = System.currentTimeMillis();
-        long memoryBefore = Util.getMemoryUsage();
+        long startMemory = Util.getMemoryUsage();
 
+        // Inisialisasi priority queue dengan startWord
+        // prioQueue = list of string yang akan diurutkan berdasarkan weightTotal
         List<String> prioQueue = new ArrayList<String>();
         prioQueue.add(startWord);
 
-        Map<String, String> cameFrom = new HashMap<String, String>();
+        // Inisialisasi parent dengan map kosong
+        // parent[string] = parent dari string
+        Map<String, String> parent = new HashMap<String, String>();
 
-        Map<String, Integer> gScore = new HashMap<String, Integer>();
-        gScore.put(startWord, 0);
+        // Inisialisasi weightFromRoot map dengan startWord
+        // weightFromRoot[string] = jumlah langkah dari root ke string
+        Map<String, Integer> weightFromRoot = new HashMap<String, Integer>();
+        weightFromRoot.put(startWord, 0);
 
-        Map<String, Integer> fScore = new HashMap<String, Integer>();
-        fScore.put(startWord, h(startWord, endWord));
+        // Init weightTotal map dengan startWord
+        // weightTotal[string] = weightFromRoot[string] + jumlah huruf yang sama dengan endWord
+        Map<String, Integer> weightTotal = new HashMap<String, Integer>();
+        weightTotal.put(startWord, Dictionary.countDifferentLetters(startWord, endWord));
 
+        // Loop sampai prioQueue kosong atau ditemukan endWord
         while (!prioQueue.isEmpty()) {
+
+            // dequeue
             String current = prioQueue.get(0);
             prioQueue.remove(0);
 
+            // Jika current adalah endWord, return
             if (current.equals(endWord)){
 
-                List<String> path = constructPath(cameFrom, endWord);
-                int nodesVisited = cameFrom.size();
+                List<String> path = getPath(parent, endWord);
+                int nodesVisited = parent.size() + 1;
                 long duration = System.currentTimeMillis() - startTime;
-                long memory = Util.getMemoryUsage() - memoryBefore;
+                long memory = Util.getMemoryUsage() - startMemory;
                 
                 return new Result(path, nodesVisited, duration, memory);
             } 
 
+            // Untuk setiap neighbour dari current
             for (String neighbour : wordMap.get(current)) {
-                int tentativeGScore = gScore.get(current) + 1;
 
-                if (tentativeGScore < gScore.getOrDefault(neighbour, Integer.MAX_VALUE)){
-                    cameFrom.put(neighbour, current);
-                    gScore.put(neighbour, tentativeGScore);
-                    fScore.put(neighbour, gScore.get(neighbour) + h(neighbour, endWord));
+                // weightFromRoot neighbour berdasarkan current path
+                int newWeightFromRoot = weightFromRoot.get(current) + 1;
+
+                // Jika weightFromRoot neighbour lebih kecil dari weightFromRoot[neighbour] atau neighbour belum dijelajahi
+                if (newWeightFromRoot < weightFromRoot.getOrDefault(neighbour, Integer.MAX_VALUE)){
+                    
+                    // Update nilai weightFromRoot, weightTotal, parent, dan prioQueue
+                    parent.put(neighbour, current);
+                    weightFromRoot.put(neighbour, newWeightFromRoot);
+                    weightTotal.put(neighbour, weightFromRoot.get(neighbour) + Dictionary.countDifferentLetters(neighbour, endWord));
 
                     if (!prioQueue.contains(neighbour)){
                         prioQueue.add(neighbour);
-                        prioQueue.sort(Comparator.comparingInt(fScore::get));
                     }
+                    prioQueue.sort(Comparator.comparingInt(weightTotal::get));
                 }
             }
         }
 
-        int nodesVisited = cameFrom.size();
+        int nodesVisited = parent.size() + 1;
         long duration = System.currentTimeMillis() - startTime;
-        long memory = Util.getMemoryUsage() - memoryBefore;
+        long memory = Util.getMemoryUsage() - startMemory;
 
         return new Result(1, nodesVisited, duration, memory);
     }
 
-    public static int h(String word, String endWord){
-        return Dictionary.countSameLetters(word, endWord);
-    }
-
-    public static List<String> constructPath(Map<String, String> cameFrom, String endWord){
+    // Helper method untuk mendapatkan path dari parent map
+    public static List<String> getPath(Map<String, String> parent, String endWord){
         List<String> path = new ArrayList<String>();
         String current = endWord;
         while (current != null){
             path.add(0, current);
-            current = cameFrom.get(current);
+            current = parent.get(current);
         }
         return path;
     }

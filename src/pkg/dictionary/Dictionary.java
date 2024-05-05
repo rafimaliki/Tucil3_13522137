@@ -167,18 +167,6 @@ public class Dictionary {
         return diffCount == 1;
     }
 
-    public static int countSameLetters(String word1, String word2) {
-        int count = 0;
-
-        for (int i = 0; i < word1.length(); i++) {
-            if (word1.charAt(i) == word2.charAt(i)) {
-                count++;
-            }
-        }
-
-        return word1.length()-count;
-    }
-
     public static int countDifferentLetters(String word1, String word2) {
         int count = 0;
 
@@ -194,4 +182,4 @@ public class Dictionary {
     public static boolean isValidWord(String word) {
         return dictionary.contains(word);
     }
-}
+} 

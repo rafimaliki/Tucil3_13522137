@@ -11,13 +11,14 @@ import pkg.result.Result;
 import pkg.util.Util;
 
 public class GBFS {
-    public static Result search(String startWord, String endWord){
+    public static Result search(final String startWord, final String endWord){
 
+        System.out.println("\nMencari path menggunakan Greedy Best First Search...\n");
+
+        // Bersihkan memory
         System.gc();
-        
-        startWord = startWord.trim().toLowerCase();
-        endWord = endWord.trim().toLowerCase();
 
+        // Validasi kata
         if (!Dictionary.isValidWord(startWord)){
             return new Result(2);
         } else if (!Dictionary.isValidWord(endWord)){
@@ -28,64 +29,76 @@ public class GBFS {
             return new Result(5);
         }
 
+        // Load dictionary
         Map<String, List<String>> wordMap = Dictionary.loadMappedDictonary(startWord.length());
 
+        // Inisialisasi waktu mulai dan memory mula-mula
         long startTime = System.currentTimeMillis();
-        long memoryBefore = Util.getMemoryUsage();
+        long startMemory = Util.getMemoryUsage();
 
+        // Inisialisasi priority queue dengan startWord
+        // prioQueue = list of string yang akan diurutkan berdasarkan weightToEndWord
+        // weightToEndWord = jumlah huruf yang berbeda dengan endWord
         List<String> prioQueue = new ArrayList<String>();
         prioQueue.add(startWord);
+        
+        // Inisialisasi parent dengan map kosong
+        // parent[string] = parent dari string
+        Map<String, String> parent = new HashMap<String, String>();
 
-        Map<String, String> cameFrom = new HashMap<String, String>();
-
+        // Inisialisasi visited dengan startWord
+        // visited = list of string yang sudah dikunjungi
         List<String> visited = new ArrayList<String>();
         visited.add(startWord);
 
         while (!prioQueue.isEmpty()){
+
+            // dequeue
             String current = prioQueue.get(0);
             prioQueue.remove(0);
 
+            // Untuk setiap neighbour dari current
             for (String neighbor : wordMap.get(current)){
 
-                if (!visited.contains(neighbor)){
-                    if (neighbor.equals(endWord)){
-                        cameFrom.put(neighbor, current);
+                // Jika neighbour sudah dikunjungi, lanjutkan
+                if (visited.contains(neighbor)){
+                    continue;
 
-                        List<String> path = constructPath(cameFrom, endWord);
-                        int nodesVisited = cameFrom.size();
-                        long duration = System.currentTimeMillis() - startTime;
-                        long memory = Util.getMemoryUsage() - memoryBefore;
+                // Jika neighbour adalah endWord, return
+                } else if (neighbor.equals(endWord)){
+                    parent.put(neighbor, current);
 
-                        return new Result(path, nodesVisited, duration, memory);
-                    } else {
-                        final String finalEndWord = endWord;
-
-                        visited.add(neighbor);
-                        cameFrom.put(neighbor, current);
-                        prioQueue.add(neighbor);
-                        prioQueue.sort(Comparator.comparingInt(word -> h(word, finalEndWord)));
-                    }
+                    List<String> path = getPath(parent, endWord);
+                    int nodesVisited = parent.size();
+                    long duration = System.currentTimeMillis() - startTime;
+                    long memory = Util.getMemoryUsage() - startMemory;
+                    
+                    return new Result(path, nodesVisited, duration, memory);
+                
+                // Jika neighbour belum dikunjungi, tambahkan ke prioQueue
+                } else {
+                    visited.add(neighbor);
+                    parent.put(neighbor, current);
+                    prioQueue.add(neighbor);
+                    prioQueue.sort(Comparator.comparingInt(word -> Dictionary.countDifferentLetters(word, endWord)));
                 }
             }
         }
         
-        int nodesVisited = cameFrom.size();
+        int nodesVisited = parent.size();
         long duration = System.currentTimeMillis() - startTime;
-        long memory = Util.getMemoryUsage() - memoryBefore;
+        long memory = Util.getMemoryUsage() - startMemory;
 
         return new Result(1, nodesVisited, duration, memory);
     }
 
-    public static int h(String word, String endWord){
-        return Dictionary.countSameLetters(word, endWord);
-    }
-
-    public static List<String> constructPath(Map<String, String> cameFrom, String endWord){
+    // Helper method untuk mendapatkan path dari parent map
+    public static List<String> getPath(Map<String, String> parent, String endWord){
         List<String> path = new ArrayList<String>();
         String current = endWord;
         while (current != null){
             path.add(0, current);
-            current = cameFrom.get(current);
+            current = parent.get(current);
         }
         return path;
     }

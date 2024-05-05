@@ -1,0 +1,1 @@
+javac -d bin src/pkg/algorithm/*.java src/pkg/dictionary/*.java src/pkg/result/*.java src/pkg/util/*.java src/Main.java
