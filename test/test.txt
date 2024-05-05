@@ -1,0 +1,29 @@
+Test Case 1
+
+startWord : fade
+endWord   : read
+
+Test Case 2
+
+startWord : hand
+endWord   : tear
+
+Test Case 3
+
+startWord : grade
+endWord   : house
+
+Test Case 4
+
+startWord : faith
+endWord   : trunk
+
+Test Case 5
+
+startWord : bridge
+endWord   : trough
+
+Test Case 6
+
+startWord : handle
+endWord   : breath
