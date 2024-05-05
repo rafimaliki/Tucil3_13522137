@@ -71,7 +71,7 @@ public class GBFS {
                     parent.put(neighbor, current);
 
                     List<String> path = getPath(parent, endWord);
-                    int nodesVisited = parent.size();
+                    int nodesVisited = parent.size() + 1;
                     long duration = System.currentTimeMillis() - startTime;
                     long memory = Util.getMemoryUsage() - startMemory;
                     
@@ -87,7 +87,7 @@ public class GBFS {
             }
         }
         
-        int nodesVisited = parent.size();
+        int nodesVisited = parent.size() + 1;
         long duration = System.currentTimeMillis() - startTime;
         long memory = Util.getMemoryUsage() - startMemory;
 
