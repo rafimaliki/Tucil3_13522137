@@ -69,22 +69,22 @@ public class UCS {
                 return new Result(path, nodesVisited, duration, memory);
             } 
 
-            // Untuk setiap neighbour dari current
-            for (String neighbour : wordMap.get(current)) {
+            // Untuk setiap neighbor dari current
+            for (String neighbor : wordMap.get(current)) {
 
-                // weightFromRoot neighbour berdasarkan current path
+                // weightFromRoot neighbor berdasarkan current path
                 int newWeightFromRoot = weightFromRoot.get(current) + 1;
 
-                // Jika weightFromRoot neighbour lebih kecil dari weightFromRoot[neighbour] atau neighbour belum dijelajahi
+                // Jika weightFromRoot neighbor lebih kecil dari weightFromRoot[neighbor] atau neighbor belum dijelajahi
                 // dalam kasus WordLadder, pernyataan pertama pasti false (UCS akan bekerja seperti BFS)
-                if (newWeightFromRoot < weightFromRoot.getOrDefault(neighbour, Integer.MAX_VALUE)){
+                if (newWeightFromRoot < weightFromRoot.getOrDefault(neighbor, Integer.MAX_VALUE)){
                     
                     // Update nilai weightFromRoot, parent, dan prioQueue
-                    parent.put(neighbour, current);
-                    weightFromRoot.put(neighbour, newWeightFromRoot);
+                    parent.put(neighbor, current);
+                    weightFromRoot.put(neighbor, newWeightFromRoot);
 
-                    if (!prioQueue.contains(neighbour)){
-                        prioQueue.add(neighbour);
+                    if (!prioQueue.contains(neighbor)){
+                        prioQueue.add(neighbor);
                     }
                     prioQueue.sort(Comparator.comparingInt(weightFromRoot::get));
                 }

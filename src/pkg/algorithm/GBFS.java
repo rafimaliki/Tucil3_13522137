@@ -52,20 +52,21 @@ public class GBFS {
         List<String> visited = new ArrayList<String>();
         visited.add(startWord);
 
+        // Loop sampai prioQueue kosong atau ditemukan endWord
         while (!prioQueue.isEmpty()){
 
             // dequeue
             String current = prioQueue.get(0);
             prioQueue.remove(0);
 
-            // Untuk setiap neighbour dari current
+            // Untuk setiap neighbor dari current
             for (String neighbor : wordMap.get(current)){
 
-                // Jika neighbour sudah dikunjungi, lanjutkan
+                // Jika neighbor sudah dikunjungi, lanjutkan
                 if (visited.contains(neighbor)){
                     continue;
 
-                // Jika neighbour adalah endWord, return
+                // Jika neighbor adalah endWord, return
                 } else if (neighbor.equals(endWord)){
                     parent.put(neighbor, current);
 
@@ -76,7 +77,7 @@ public class GBFS {
                     
                     return new Result(path, nodesVisited, duration, memory);
                 
-                // Jika neighbour belum dikunjungi, tambahkan ke prioQueue
+                // Jika neighbor belum dikunjungi, tambahkan ke prioQueue
                 } else {
                     visited.add(neighbor);
                     parent.put(neighbor, current);
